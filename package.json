@@ -1,0 +1,26 @@
+{
+  "name": "foldervoider",
+  "version": "1.0.0",
+  "description": "A simple application to automate scheduling folder purging",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "keywords": [
+    "application",
+    "desktop",
+    "folder",
+    "delete",
+    "empty",
+    "purge"
+  ],
+  "author": "Luis Gabrielle Putan",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^26.2.4"
+  },
+  "dependencies": {
+    "node-windows": "^1.0.0-beta.8"
+  }
+}
