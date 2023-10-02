@@ -1,26 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <script src="./p5.min.js"></script>
+    <style>
+        /* Your custom styles go here */
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .mainWindow {
+            text-align: center;
+            width: 80%;
+            max-width: 400px; /* Adjust as needed */
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .titleSection {
+            margin-bottom: 20px;
+        }
+
+        .body {
+            /* Add more styling as needed */
+        }
+
+        md-divider {
+            /* Add divider styling as needed */
+        }
+
+        md-outlined-text-field,
+        md-outlined-select,
+        md-filled-select,
+        md-outlined-text-field {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        md-filled-button {
+            /* Add button styling as needed */
+        }
+
+        /* Add more custom styles as needed */
+    </style>
 </head>
+
 <body>
-    <h1>Hello</h1>
-    <button id="filebutton">Click Me</button>
-    <p id="filepath">File Path: </p>
-    <label for="task-name">Task Name</label>
-    <input type="text" id="task-name" name="task-name">
-    
+    <div class="mainWindow">
+        <div class="titleSection">
+            <h1>FolderVoider</h1>
+            <md-divider inset></md-divider>
+        </div>
 
-    <label for="sched-params">Schedule Parameter</label>
-    <select id="sched-params" name="sched-params">
-        <option value="Daily">DAILY</option>
-        <option value="Weekly">WEEKLY</option>
-        <option value="Monthly">MONTHLY</option>
-    </select>
+        <div class="body">
+            <md-outlined-text-field label="Task Name" value="" id="task-name">
 
-    <button id="submit">Submit</button>
+            </md-outlined-text-field>
+
+            <md-outlined-select required>
+                <md-select-option value="Daily">
+                    <div slot="headline">Daily</div>
+                </md-select-option>
+                <md-select-option value="Weekly">
+                    <div slot="headline">Weekly</div>
+                </md-select-option>
+                <md-select-option value="Monthly">
+                    <div slot="headline">Monthly</div>
+                </md-select-option>
+                </md-filled-select>
+            </md-outlined-select>
+
+            <md-outlined-text-field label="Scheduled Time Execution" value="13:00">
+            </md-outlined-text-field>
+
+            <md-elevated-button id="filebutton">Select Folder</md-elevated-button>
+
+            <md-filled-button id="submit">Initiate Void</md-filled-button>
+
+        </div>
+        <div class="blackHole">
+            <script src="./sketch.js"></script>
+        </div>
+    </div>
+
+
+
     <script src="./renderer.js"></script>
+    <script type="module" src="./index.js"></script>
+    <script type="module" src="./bundle.js"></script>
 </body>
+
 </html>
