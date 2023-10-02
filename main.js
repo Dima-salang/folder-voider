@@ -26,7 +26,7 @@ async function handleFileOpen () {
         
         fs.writeFileSync(batScriptPath, batScript);
 
-        exec.exec(batScriptPath, (error, stdout, stderr) => {
+        nodeWin.elevate(batScriptPath, (error, stdout, stderr) => {
             if (error) {
                 console.error('Error executing batch script: ', error);
                 return;
@@ -53,14 +53,17 @@ async function scheduleTask(data) {
     const nodeScriptPath = targetDir; // Replace with the actual path to your Node.js script
 
     const psCommand = `
-    $action = New-ScheduledTaskAction -Execute 'node' -Argument '${nodeScriptPath}'
-    $trigger = New-ScheduledTaskTrigger -${scheduleParameters} -At "12:00" 
-    Register-ScheduledTask -Action $action -Trigger $trigger -TaskName '${taskName}' -User 'Luis'
+    schtasks /create /tn "${taskName}" /tr "node '${nodeScriptPath}'" /sc "${scheduleParameters}" /st "12:00" /ru "SYSTEM"
   `;
+
+    const scheduleBatScript = 'schedule.bat'
+    const scheduleBatScriptPath = path.resolve(__dirname, scheduleBatScript);
+
+    fs.writeFileSync(scheduleBatScriptPath, psCommand)
 
   console.log(psCommand)
 
-    nodeWin.elevate(psCommand, (error, stdout, stderr) => {
+    nodeWin.elevate(scheduleBatScriptPath, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error scheduling task: ${error.message}`);
             return;
