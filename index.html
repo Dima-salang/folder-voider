@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>FolderVoider</title>
     <script src="./p5.min.js"></script>
     <style>
         /* Your custom styles go here */
@@ -33,14 +33,6 @@
             margin-bottom: 20px;
         }
 
-        .body {
-            /* Add more styling as needed */
-        }
-
-        md-divider {
-            /* Add divider styling as needed */
-        }
-
         md-outlined-text-field,
         md-outlined-select,
         md-filled-select,
@@ -49,18 +41,13 @@
             width: 100%;
         }
 
-        md-filled-button {
-            /* Add button styling as needed */
-        }
-
-        /* Add more custom styles as needed */
     </style>
 </head>
 
 <body>
     <div class="mainWindow">
         <div class="titleSection">
-            <h1>FolderVoider</h1>
+            <h1>Schedule Void</h1>
             <md-divider inset></md-divider>
         </div>
 
@@ -69,7 +56,7 @@
 
             </md-outlined-text-field>
 
-            <md-outlined-select required>
+            <md-outlined-select required id="sched-params">
                 <md-select-option value="Daily">
                     <div slot="headline">Daily</div>
                 </md-select-option>
@@ -84,8 +71,6 @@
 
             <md-outlined-text-field label="Scheduled Time Execution" value="13:00">
             </md-outlined-text-field>
-
-            <md-elevated-button id="filebutton">Select Folder</md-elevated-button>
 
             <md-filled-button id="submit">Initiate Void</md-filled-button>
 

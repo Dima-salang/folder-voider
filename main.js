@@ -5,7 +5,7 @@ const exec = require('child_process');
 const nodeWin = require('node-windows');
 
 
-async function handleFileOpen () {
+async function handleFileOpen (taskName) {
     const { canceled, filePaths } = await dialog.showOpenDialog({
         properties: ['openDirectory']
     })
@@ -21,20 +21,10 @@ async function handleFileOpen () {
         pause
         `;
 
-        const batScriptFileName = 'voider.bat';
+        const batScriptFileName = `folderVoider_${taskName}_voider.bat`;
         const batScriptPath = path.resolve(__dirname, batScriptFileName);
         
         fs.writeFileSync(batScriptPath, batScript);
-
-        nodeWin.elevate(batScriptPath, (error, stdout, stderr) => {
-            if (error) {
-                console.error('Error executing batch script: ', error);
-                return;
-            }
-            console.log(`Script output: ${stdout}`);
-            console.error(`Script errors: ${stderr}`);
-        })
-        console.log('batch script created.')
 
         // Listen for the 'scheduleTask' message from the renderer process
         ipcMain.once('scheduleTask', (event, data) => {
@@ -56,7 +46,7 @@ async function scheduleTask(data) {
     schtasks /create /tn "${taskName}" /tr "node '${nodeScriptPath}'" /sc "${scheduleParameters}" /st "12:00" /ru "SYSTEM"
   `;
 
-    const scheduleBatScript = 'schedule.bat'
+    const scheduleBatScript = `folderVoider_${taskName}_schedule.bat`
     const scheduleBatScriptPath = path.resolve(__dirname, scheduleBatScript);
 
     fs.writeFileSync(scheduleBatScriptPath, psCommand)
@@ -82,11 +72,13 @@ const createWindow = () => {
         }
     })
 
-    win.loadFile('index.html')
+    win.loadFile('init.html')
 }
 
 
 app.whenReady().then(() => {
-    ipcMain.handle('dialog:openFile', handleFileOpen)
+    ipcMain.handle('dialog:openFile', (event, taskName) => {
+        return handleFileOpen(taskName);
+    });
     createWindow()
 })

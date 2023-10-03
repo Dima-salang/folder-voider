@@ -3,10 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
+    <title>FolderVoider</title>
     <script src="./p5.min.js"></script>
+    <link rel="stylesheet" href="./fontawesome-free-6.4.2-web/fontawesome-free-6.4.2-web/css/all.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
-    <script src="./sketch.js"></script>
+    <h1>FolderVoider</h1>
+    <a href="./index.html">
+        <md-fab aria-label="Edit">
+            <md-icon slot="icon"><i class="fa-solid fa-plus"></i></md-icon>
+          </md-fab>
+    </a>
+    <a href="./index.html">
+        <md-fab aria-label="Edit">
+            <md-icon slot="icon"><i class="fa-solid fa-table-list"></i></md-icon>
+          </md-fab>
+    </a>
+    <a href="./index.html">
+        <md-fab aria-label="Edit">
+            <md-icon slot="icon"><i class="fa-solid fa-plus"></i></md-icon>
+          </md-fab>
+    </a>
+    <script type="module" src="./index.js"></script>
+    <script type="module" src="./bundle.js"></script>
 </body>
 </html>
