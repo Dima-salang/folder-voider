@@ -38,12 +38,12 @@ async function handleFileOpen (taskName) {
 }
 
 async function scheduleTask(data) {
-    const { taskName, scheduleParameters, targetDir } = data;
+    const { taskName, scheduleParameters, targetDir, timeExecution } = data;
 
     const nodeScriptPath = targetDir; // Replace with the actual path to your Node.js script
 
     const psCommand = `
-    schtasks /create /tn "${taskName}" /tr "node '${nodeScriptPath}'" /sc "${scheduleParameters}" /st "12:00" /ru "SYSTEM"
+    schtasks /create /tn "${taskName}" /tr "node '${nodeScriptPath}'" /sc "${scheduleParameters}" /st "${timeExecution}" /ru "SYSTEM"
   `;
 
     const scheduleBatScript = `folderVoider_${taskName}_schedule.bat`

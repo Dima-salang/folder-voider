@@ -12,5 +12,5 @@ submitBtn.addEventListener('click', async () => {
     const targetDir = await window.electronAPI.openFile(taskName)   
 
     // Send task name and schedule parameters to the main process
-    window.electronAPI.scheduleTask({ taskName, scheduleParameters });
+    window.electronAPI.scheduleTask({ taskName, scheduleParameters, timeExecution });
 })
