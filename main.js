@@ -22,7 +22,12 @@ async function handleFileOpen (taskName) {
         `;
 
         const batScriptFileName = `folderVoider_${taskName}_voider.bat`;
-        const batScriptPath = path.resolve(__dirname, batScriptFileName);
+        const batScriptDirectory = path.resolve(__dirname, 'voids');
+        const batScriptPath = path.resolve(batScriptDirectory, batScriptFileName);
+
+        if (!fs.existsSync(batScriptDirectory)) {
+            fs.mkdirSync(batScriptDirectory);
+        }
         
         fs.writeFileSync(batScriptPath, batScript);
 
@@ -47,20 +52,36 @@ async function scheduleTask(data) {
   `;
 
     const scheduleBatScript = `folderVoider_${taskName}_schedule.bat`
-    const scheduleBatScriptPath = path.resolve(__dirname, scheduleBatScript);
 
-    fs.writeFileSync(scheduleBatScriptPath, psCommand)
 
-  console.log(psCommand)
 
-    nodeWin.elevate(scheduleBatScriptPath, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error scheduling task: ${error.message}`);
-            return;
+    try {
+        const scheduleDirectory = path.resolve(__dirname, 'schedules');
+
+        if (!fs.existsSync(scheduleDirectory)) {
+            fs.mkdirSync(scheduleDirectory);
         }
-        console.log(`Task scheduled successfully: ${stdout}`);
-    });
+
+        const scheduleBatScriptPath = path.resolve(scheduleDirectory, scheduleBatScript);
+
+        fs.writeFileSync(scheduleBatScriptPath, psCommand);
+
+        await new Promise((resolve, reject) => {
+            nodeWin.elevate(scheduleBatScriptPath, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error scheduling task: ${error.message}`);
+                    reject(error);
+                } else {
+                    console.log(`Task scheduled successfully: ${stdout}`);
+                    resolve();
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Unhandled promise rejection:', error);
+    }
 }
+
 
 const createWindow = () => {
     const win = new BrowserWindow({
