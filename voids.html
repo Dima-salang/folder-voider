@@ -1,0 +1,45 @@
+<!-- voids.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Tasks</title>
+</head>
+<body>
+    <h1>Running Tasks</h1>
+    <ul id="runningTasks"></ul>
+    <button id="getTasks">Get Tasks</button>
+
+    <script>
+        // Check if electronAPI is already defined to avoid redeclaration
+        const getTasksBtn = document.getElementById("getTasks");
+
+            // Function to fetch and display running tasks
+            async function fetchRunningTasks() {
+                try {
+                    const tasks = await electronAPI.getRunningTasks();
+                    const runningTasksList = document.getElementById('runningTasks');
+
+                    // Clear existing list
+                    runningTasksList.innerHTML = '';
+
+                    tasks.forEach(task => {
+                        const li = document.createElement('li');
+                        li.textContent = task;
+                        runningTasksList.appendChild(li);
+                    });
+                } catch (error) {
+                    console.error('Error fetching running tasks:', error);
+                }
+            }
+
+
+            // Fetch and display running tasks on page load
+            getTasksBtn.addEventListener('click', () => {
+                fetchRunningTasks();
+            });
+        console.log("error")
+    </script>
+</body>
+</html>

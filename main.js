@@ -6,6 +6,7 @@ const nodeWin = require('node-windows');
 
 
 async function handleFileOpen (taskName) {
+
     const { canceled, filePaths } = await dialog.showOpenDialog({
         properties: ['openDirectory']
     })
@@ -44,11 +45,12 @@ async function handleFileOpen (taskName) {
 
 async function scheduleTask(data) {
     const { taskName, scheduleParameters, targetDir, timeExecution } = data;
+    const modifiedTaskName = `folderVoider_${taskName}`
 
     const nodeScriptPath = targetDir; // Replace with the actual path to your Node.js script
 
     const psCommand = `
-    schtasks /create /tn "${taskName}" /tr "node '${nodeScriptPath}'" /sc "${scheduleParameters}" /st "${timeExecution}" /ru "SYSTEM"
+    schtasks /create /tn "${modifiedTaskName}" /tr "node '${nodeScriptPath}'" /sc "${scheduleParameters}" /st "${timeExecution}" /ru "SYSTEM"
   `;
 
     const scheduleBatScript = `folderVoider_${taskName}_schedule.bat`
@@ -103,3 +105,44 @@ app.whenReady().then(() => {
     });
     createWindow()
 })
+
+// IPC communication to fetch running tasks
+ipcMain.handle('getRunningTasks', async (event, args) => {
+    return await listRunningTasks();
+});
+
+// Function to list running tasks
+function listRunningTasks() {
+    return new Promise((resolve, reject) => {
+        nodeWin.elevate('schtasks /query /fo LIST /v', (error, stdout, stderr) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            console.log(stdout);
+
+            const tasks = parseTaskList(stdout);
+            const folderVoiderTasks = tasks.filter(task => task.startsWith('folderVoider'));
+            resolve(folderVoiderTasks);
+        });
+    });
+}
+
+function parseTaskList(output) {
+    // Parse the output and extract relevant information
+    // Modify this based on the actual output format of schtasks
+    // For example, split by line breaks and extract necessary information
+    const lines = output.split('\n');
+    const tasks = [];
+
+    for (const line of lines) {
+        // Parse each line and extract relevant information
+        // Example: Check if the line contains task name or other relevant details
+        if (line.includes('TaskName:')) {
+            tasks.push(line.trim().substring('TaskName:'.length));
+        }
+        // Add more conditions for other information as needed
+    }
+
+    return tasks;
+}
